@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="js/map1.js"></script>
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            height: 80%;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="480"></canvas>
+    <script src="js/global.js"></script>
+    <script src="js/methods.js"></script>
+    <script src="js/keyhandle.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        window.onload = () => {
+            Init();
+        };
+    </script>
+</body>
+</html>
