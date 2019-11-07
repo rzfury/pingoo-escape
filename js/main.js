@@ -8,10 +8,13 @@ function Init() {
     // ================
 
     createInteractible(8, 12, {
-        all: () => {
-            console.log('test');
-        }
-    }, true);
+        // playerOnTop: () => console.log('you are on top'),
+        // playerOnBottom: () => console.log('you are on bottom'),
+        // playerOnLeft: () => console.log('you are on Left'),
+        // playerOnRight: () => console.log('you are on Right'),
+        playerAbove: () => console.log('you are above!'),
+        playerBelow: () => console.log('you are below!'),
+    }, true, true);
 
     // ================
 }

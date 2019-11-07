@@ -12,31 +12,35 @@ function initPlayer() {
         }
         this.moveSpeed = 8;
         this.moveState = {
-            up: false,
-            down: false,
-            left: false,
-            right: false,
+            UP: false,
+            DOWN: false,
+            LEFT: false,
+            RIGHT: false,
+            Z: false,
         };
         this.color = '#00F';
         this.unit_size = 30;
         this.getCenter = () => {
             return {
-                x: this.x + unit_size/2,
-                y: this.y + unit_size/2,
+                x: this.x + unit_size / 2,
+                y: this.y + unit_size / 2,
             }
         }
         this.draw = () => {
             fillColor(this.color);
             drawRect(this.x + 5, this.y + 5, this.unit_size, this.unit_size);
+
+            const facingRect = [
+                [this.getCenter().x, this.getCenter().y + 30],
+                [this.getCenter().x, this.getCenter().y - 30],
+                [this.getCenter().x - 30, this.getCenter().y],
+                [this.getCenter().x + 30, this.getCenter().y]
+            ];
+
+            drawRect(facingRect[this.facing][0] - 5, facingRect[this.facing][1] - 5, 10, 10);
         };
         this.update = () => {
-            if (this.x > this.dx) {
-                this.x = Math.max(this.x - (this.x - this.dx), this.x - this.moveSpeed);
-            }
-            else if (this.x < this.dx) {
-                this.x = Math.min(this.x + (this.dx - this.x), this.x + this.moveSpeed);
-            }
-
+            this.moveState = keyState;
             if (this.y > this.dy) {
                 this.y = Math.max(this.y - (this.y - this.dy), this.y - this.moveSpeed);
             }
@@ -44,40 +48,78 @@ function initPlayer() {
                 this.y = Math.min(this.y + (this.dy - this.y), this.y + this.moveSpeed);
             }
 
-            if (this.x == this.dx && this.moveState.left) {
+            if (this.x > this.dx) {
+                this.x = Math.max(this.x - (this.x - this.dx), this.x - this.moveSpeed);
+            }
+            else if (this.x < this.dx) {
+                this.x = Math.min(this.x + (this.dx - this.x), this.x + this.moveSpeed);
+            }
+
+            if (this.x == this.dx && this.moveState.LEFT) {
                 if (isNodeExists(this.gameAreaPos.x - 1) && isNodeWalkable(this.gameAreaPos.x - 1, this.gameAreaPos.y)) {
                     this.gameAreaPos.x--;
                     this.dx -= unit_size;
                 }
+
+                if (this.facing !== 2) {
+                    this.facing = 2;
+                }
             }
-            else if (this.x == this.dx && this.moveState.right) {
+            else if (this.x == this.dx && this.moveState.RIGHT) {
                 if (isNodeExists(this.gameAreaPos.x + 1) && isNodeWalkable(this.gameAreaPos.x + 1, this.gameAreaPos.y)) {
                     this.gameAreaPos.x++;
                     this.dx += unit_size;
                 }
+
+                if (this.facing !== 3) {
+                    this.facing = 3;
+                }
             }
 
-            if (this.y == this.dy && this.moveState.up) {
+            if (this.y == this.dy && this.moveState.UP) {
                 if (isNodeExists(this.gameAreaPos.x, this.gameAreaPos.y - 1) && isNodeWalkable(this.gameAreaPos.x, this.gameAreaPos.y - 1)) {
                     this.gameAreaPos.y--;
                     this.dy -= unit_size;
                 }
+
+                if (this.facing !== 1) {
+                    this.facing = 1;
+                }
             }
-            else if (this.y == this.dy && this.moveState.down) {
+            else if (this.y == this.dy && this.moveState.DOWN) {
                 if (isNodeExists(this.gameAreaPos.x, this.gameAreaPos.y + 1) && isNodeWalkable(this.gameAreaPos.x, this.gameAreaPos.y + 1)) {
                     this.gameAreaPos.y++;
                     this.dy += unit_size;
                 }
+
+                if (this.facing !== 0) {
+                    this.facing = 0;
+                }
             }
         };
-        this.changeMoveState = (move, state) => {
-            switch (move.toUpperCase()) {
-                case "W": this.moveState.up = state; break;
-                case "S": this.moveState.down = state; break;
-                case "A": this.moveState.left = state; break;
-                case "D": this.moveState.right = state; break;
+        this.interact = () => {
+            if (keyState.Z) {
+                return;
             }
-        };
+            const facingPos = [[0, 1], [0, -1], [-1, 0], [1, 0]];
+            let interactObj = getInteractible(this.gameAreaPos.x + facingPos[this.facing][0], this.gameAreaPos.y + facingPos[this.facing][1]);
+            
+            if(interactObj !== null) {
+                interactObj.triggerEvent();
+            }
+            else {
+                interactObj = getInteractible(this.gameAreaPos.x, this.gameAreaPos.y);
+                if(interactObj !== null) {
+                    interactObj.triggerEvent();
+                }
+            }
+        }
+
+        // 0 = DOWN
+        // 1 = UP
+        // 2 = LEFT
+        // 3 = RIGHT
+        this.facing = 0;
     };
 }
 

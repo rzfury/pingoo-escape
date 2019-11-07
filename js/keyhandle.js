@@ -1,45 +1,56 @@
 function keyDownHandler(event) {
-    event.preventDefault();
+    if (!event.ctrlKey) {
+        event.preventDefault();
+    }
 
     switch (event.key) {
         case 'w':
         case 'ArrowUp':
-            player.changeMoveState('w', true);
+            keyState.UP = true;
             break;
         case 's':
         case 'ArrowDown':
-            player.changeMoveState('s', true);
+            keyState.DOWN = true;
             break;
         case 'a':
         case 'ArrowLeft':
-            player.changeMoveState('a', true);
+            keyState.LEFT = true;
             break;
         case 'd':
         case 'ArrowRight':
-            player.changeMoveState('d', true);
+            keyState.RIGHT = true;
+            break;
+        case 'z':
+            player.interact();
+            keyState.Z = true;
             break;
     }
 }
 
 function keyUpHandler(event) {
-    event.preventDefault();
+    if (!event.ctrlKey) {
+        event.preventDefault();
+    }
 
     switch (event.key) {
         case 'w':
         case 'ArrowUp':
-            player.changeMoveState('w', false);
+            keyState.UP = false;
             break;
         case 's':
         case 'ArrowDown':
-            player.changeMoveState('s', false);
+            keyState.DOWN = false;
             break;
         case 'a':
         case 'ArrowLeft':
-            player.changeMoveState('a', false);
+            keyState.LEFT = false;
             break;
         case 'd':
         case 'ArrowRight':
-            player.changeMoveState('d', false);
+            keyState.RIGHT = false;
+            break;
+        case 'z':
+            keyState.Z = false;
             break;
     }
 }
