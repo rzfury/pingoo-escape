@@ -4,6 +4,16 @@ function Init() {
     initPlayer();
     generateGameAreaFromMap(map);
     // generateGameArea(15, 15);
+
+    // ================
+
+    createInteractible(8, 12, {
+        all: () => {
+            console.log('test');
+        }
+    }, true);
+
+    // ================
 }
 
 function Update() {
