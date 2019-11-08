@@ -1,4 +1,6 @@
 function Init() {
+    loadImages();
+
     initCanvas();
     initKeyHandle();
     initPlayer();
@@ -14,7 +16,7 @@ function Init() {
         // playerOnRight: () => console.log('you are on Right'),
         playerAbove: () => console.log('you are above!'),
         playerBelow: () => console.log('you are below!'),
-    }, true, true);
+    }, false, false, images.pingoo);
 
     // ================
 }

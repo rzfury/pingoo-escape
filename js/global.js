@@ -1,6 +1,7 @@
 let canvas, context;
 let gameArea = [];
-let tiles;
+let tiles = [];
+let images = {};
 
 let keyState = {
     UP: false,
