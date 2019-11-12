@@ -32,7 +32,7 @@ function initPlayer(startX = 0, startY = 0) {
         }
         this.draw = () => {
             fillColor(this.color);
-            drawSprite(images.pingoo, Math.floor(this.frameW / 2), this.facing, 16, 16, this.x + 5, this.y + 5, this.unit_size, this.unit_size);
+            drawSprite(images.pingoo, Math.floor(this.frameW / 2), this.facing, 128, 128, this.x + 5, this.y + 5, this.unit_size, this.unit_size);
 
             const facingRect = [
                 [this.getCenter().x, this.getCenter().y + 30],
