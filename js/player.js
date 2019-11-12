@@ -1,14 +1,14 @@
-function initPlayer() {
-    player = new _player();
+function initPlayer(startX = 0, startY = 0) {
+    player = new _player(startX, startY);
 
-    function _player() {
-        this.x = 0;
-        this.y = 0;
-        this.dx = 0;
-        this.dy = 0;
+    function _player(px, py) {
+        this.x = px * unit_size;
+        this.y = py * unit_size;
+        this.dx = px * unit_size;
+        this.dy = py * unit_size;
         this.gameAreaPos = {
-            x: 0,
-            y: 0
+            x: px,
+            y: py
         }
         this.moveSpeed = 8;
         this.moveState = {
@@ -20,6 +20,10 @@ function initPlayer() {
         };
         this.color = '#00F';
         this.unit_size = 30;
+        this.frameW = 0;
+        this.getDestDistance = () => {
+            return Math.sqrt(Math.pow(this.dx - this.x, 2) + Math.pow(this.dy - this.y, 2));
+        }
         this.getCenter = () => {
             return {
                 x: this.x + unit_size / 2,
@@ -28,7 +32,7 @@ function initPlayer() {
         }
         this.draw = () => {
             fillColor(this.color);
-            drawRect(this.x + 5, this.y + 5, this.unit_size, this.unit_size);
+            drawSprite(images.pingoo, Math.floor(this.frameW / 2), this.facing, 128, 128, this.x + 5, this.y + 5, this.unit_size, this.unit_size);
 
             const facingRect = [
                 [this.getCenter().x, this.getCenter().y + 30],
@@ -55,6 +59,27 @@ function initPlayer() {
                 this.x = Math.min(this.x + (this.dx - this.x), this.x + this.moveSpeed);
             }
 
+            if (this.y == this.dy && this.moveState.UP) {
+                if (isNodeExists(this.gameAreaPos.x, this.gameAreaPos.y - 1) && isNodeWalkable(this.gameAreaPos.x, this.gameAreaPos.y - 1)) {
+                    this.gameAreaPos.y--;
+                    this.dy -= unit_size;
+                }
+
+                if (this.facing !== 1) {
+                    this.facing = this.moveState.LEFT ? 2 : this.moveState.RIGHT ? 3 : 1;
+                }
+            }
+            else if (this.y == this.dy && this.moveState.DOWN) {
+                if (isNodeExists(this.gameAreaPos.x, this.gameAreaPos.y + 1) && isNodeWalkable(this.gameAreaPos.x, this.gameAreaPos.y + 1)) {
+                    this.gameAreaPos.y++;
+                    this.dy += unit_size;
+                }
+
+                if (this.facing !== 0) {
+                    this.facing = this.moveState.LEFT ? 2 : this.moveState.RIGHT ? 3 : 0;
+                }
+            }
+
             if (this.x == this.dx && this.moveState.LEFT) {
                 if (isNodeExists(this.gameAreaPos.x - 1) && isNodeWalkable(this.gameAreaPos.x - 1, this.gameAreaPos.y)) {
                     this.gameAreaPos.x--;
@@ -76,25 +101,11 @@ function initPlayer() {
                 }
             }
 
-            if (this.y == this.dy && this.moveState.UP) {
-                if (isNodeExists(this.gameAreaPos.x, this.gameAreaPos.y - 1) && isNodeWalkable(this.gameAreaPos.x, this.gameAreaPos.y - 1)) {
-                    this.gameAreaPos.y--;
-                    this.dy -= unit_size;
-                }
-
-                if (this.facing !== 1) {
-                    this.facing = 1;
-                }
+            if(this.getDestDistance() > 0) {
+                this.frameW = this.frameW === 7 ? 0 : this.frameW + 1;
             }
-            else if (this.y == this.dy && this.moveState.DOWN) {
-                if (isNodeExists(this.gameAreaPos.x, this.gameAreaPos.y + 1) && isNodeWalkable(this.gameAreaPos.x, this.gameAreaPos.y + 1)) {
-                    this.gameAreaPos.y++;
-                    this.dy += unit_size;
-                }
-
-                if (this.facing !== 0) {
-                    this.facing = 0;
-                }
+            else {
+                this.frameW = 0;
             }
         };
         this.interact = () => {

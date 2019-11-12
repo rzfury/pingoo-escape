@@ -1,7 +1,9 @@
 function Init() {
+    loadImages();
+
     initCanvas();
     initKeyHandle();
-    initPlayer();
+    initPlayer(1, 1);
     generateGameAreaFromMap(map);
     // generateGameArea(15, 15);
 
@@ -14,7 +16,7 @@ function Init() {
         // playerOnRight: () => console.log('you are on Right'),
         playerAbove: () => console.log('you are above!'),
         playerBelow: () => console.log('you are below!'),
-    }, true, true);
+    }, false, false, images.pingoo);
 
     // ================
 }

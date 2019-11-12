@@ -19,6 +19,14 @@ function drawRect(x, y, w, h) {
     context.fillRect(x + drawOffset.x, y + drawOffset.y, w, h);
 }
 
+function drawImg(img, x, y, w, h) {
+    context.drawImage(img, x + drawOffset.x, y + drawOffset.y, w, h);
+}
+
+function drawSprite(img, frameW, frameH, unitW, unitH, x, y, w, h) {
+    context.drawImage(img, unitW * frameW, unitH * frameH, unitW, unitH, x + drawOffset.x, y + drawOffset.y, w, h);
+}
+
 function drawFrame(update, lateUpdate) {
     clearCanvas();
     if (gameArea.length > 0) {
