@@ -3,7 +3,7 @@ function Init() {
 
     initCanvas();
     initKeyHandle();
-    initPlayer();
+    initPlayer(1, 1);
     generateGameAreaFromMap(map);
     // generateGameArea(15, 15);
 

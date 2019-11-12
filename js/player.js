@@ -1,14 +1,14 @@
-function initPlayer() {
-    player = new _player();
+function initPlayer(startX = 0, startY = 0) {
+    player = new _player(startX, startY);
 
-    function _player() {
-        this.x = 0;
-        this.y = 0;
-        this.dx = 0;
-        this.dy = 0;
+    function _player(px, py) {
+        this.x = px * unit_size;
+        this.y = py * unit_size;
+        this.dx = px * unit_size;
+        this.dy = py * unit_size;
         this.gameAreaPos = {
-            x: 0,
-            y: 0
+            x: px,
+            y: py
         }
         this.moveSpeed = 8;
         this.moveState = {
