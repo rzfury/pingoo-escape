@@ -33,15 +33,6 @@ function initPlayer(startX = 0, startY = 0) {
         this.draw = () => {
             fillColor(this.color);
             drawSprite(images.pingoo, Math.floor(this.frameW / 2), this.facing, 128, 128, this.x + 5, this.y + 5, this.unit_size, this.unit_size);
-
-            const facingRect = [
-                [this.getCenter().x, this.getCenter().y + 30],
-                [this.getCenter().x, this.getCenter().y - 30],
-                [this.getCenter().x - 30, this.getCenter().y],
-                [this.getCenter().x + 30, this.getCenter().y]
-            ];
-
-            drawRect(facingRect[this.facing][0] - 5, facingRect[this.facing][1] - 5, 10, 10);
         };
         this.update = () => {
             this.moveState = keyState;
