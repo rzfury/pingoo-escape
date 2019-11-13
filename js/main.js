@@ -3,20 +3,20 @@ function Init() {
 
     initCanvas();
     initKeyHandle();
-    initPlayer(1, 1);
+    initPlayer(2, 0);
     generateGameAreaFromMap(map);
     // generateGameArea(15, 15);
 
     // ================
 
-    createInteractible(8, 12, {
+    createInteractible(13, 15, {
         // playerOnTop: () => console.log('you are on top'),
         // playerOnBottom: () => console.log('you are on bottom'),
         // playerOnLeft: () => console.log('you are on Left'),
         // playerOnRight: () => console.log('you are on Right'),
         playerAbove: () => console.log('you are above!'),
         playerBelow: () => console.log('you are below!'),
-    }, false, false, images.pingoo);
+    }, false, true);
 
     // ================
 }
