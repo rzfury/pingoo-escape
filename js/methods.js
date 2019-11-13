@@ -39,6 +39,8 @@ function drawFrame(update, lateUpdate) {
 
     lateDrawInteractible();
 
+    drawFog();
+
     player.update();
 
     update();
@@ -80,8 +82,8 @@ function generateGameArea(width, height) {
 function drawGameArea() {
     gameArea.forEach((horizontalNodes) => {
         horizontalNodes.forEach((node) => {
-            fillColor(node.c);
-            drawRect(node.x * unit_size, node.y * unit_size, unit_size, unit_size);
+            const img = node.walkable ? images.floor1 : !interactible[node.x][node.y].empty ? images.floor1 : images.brick1;
+            drawSprite(img, 0, 0, 128, 128, node.x * unit_size, node.y * unit_size, unit_size, unit_size);
         });
     });
 }
@@ -125,4 +127,8 @@ function isNodeWalkable(x, y) {
 
 function isNodeExists(x, y) {
     return typeof y === 'undefined' ? typeof gameArea[x] !== 'undefined' : typeof gameArea[x][y] !== 'undefined';
+}
+
+function drawFog() {
+    drawImg(images.fog, -410 + player.x + player.unit_size - 5, -410 + player.y + player.unit_size - 5, 820, 820);
 }
