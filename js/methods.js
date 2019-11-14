@@ -27,23 +27,28 @@ function drawSprite(img, frameW, frameH, unitW, unitH, x, y, w, h) {
     context.drawImage(img, unitW * frameW, unitH * frameH, unitW, unitH, x + drawOffset.x, y + drawOffset.y, w, h);
 }
 
+function drawText(text, x, y, color = '#fff', font = 'Arial', size = '12pt') {
+    context.fillStyle = color;
+    context.font = `${size} ${font}`;
+    context.fillText(text, x, y);
+}
+
 function drawFrame(update, lateUpdate) {
     clearCanvas();
     if (gameArea.length > 0) {
         drawGameArea();
+
+        drawInteractible();
+    
+        player.draw();
+    
+        lateDrawInteractible();
     }
 
-    drawInteractible();
-
-    player.draw();
-
-    lateDrawInteractible();
-
-    drawFog();
-
-    player.update();
+    drawFog(1);
 
     update();
+    player.update();
     lateUpdate();
 
     playerCenterScreen();
@@ -52,11 +57,15 @@ function drawFrame(update, lateUpdate) {
 function generateGameAreaFromMap(map = []) {
     if (map.length === 0) return;
 
+    gameAreaSize = {
+        w: map.length,
+        h: map[0].length,
+    }
+
     map.forEach((mapW) => {
         let wNodes = [];
         let emptyInteractible = [];
 
-        // ================
         mapW.forEach((nodeInfo) => {
             wNodes.push(new areaNode(nodeInfo.x, nodeInfo.y, nodeInfo.walkable, nodeInfo.walkable ? '#aaa' : '#f00'));
             emptyInteractible.push({ x: nodeInfo.x, y: nodeInfo.y, empty: true });
@@ -129,6 +138,13 @@ function isNodeExists(x, y) {
     return typeof y === 'undefined' ? typeof gameArea[x] !== 'undefined' : typeof gameArea[x][y] !== 'undefined';
 }
 
-function drawFog() {
-    drawImg(images.fog, -410 + player.x + player.unit_size - 5, -410 + player.y + player.unit_size - 5, 820, 820);
+function hasInteractible(x, y) {
+    return getInteractible(x, y) !== null;
+}
+
+function drawFog(viewDistance = 1) {
+    const size = 820 * ((Math.max(1, viewDistance) + 1) / 2);
+    const x = ((size/2*-1) + player.x + player.unit_size - 5);
+    const y = ((size/2*-1) + player.y + player.unit_size - 5);
+    drawImg(images.fog, x, y, size, size);
 }

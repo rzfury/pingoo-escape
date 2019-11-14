@@ -11,6 +11,7 @@ let keyState = {
     Z: false
 }
 
+let gameAreaSize = { w: 0, h: 0 };
 let drawOffset = { x: 0, y: 0 };
 
 let player;

@@ -116,6 +116,12 @@ function initPlayer(startX = 0, startY = 0) {
                 }
             }
         }
+        this.samePosWithInteractible = () => {
+            if(getInteractible(this.gameAreaPos.x, this.gameAreaPos.y) !== null) {
+                return !getInteractible(this.gameAreaPos.x, this.gameAreaPos.y).triggered;
+            }
+            return false;
+        }
 
         // 0 = DOWN
         // 1 = UP

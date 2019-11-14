@@ -1,20 +1,43 @@
-function interactibleObj(nodeX, nodeY, trigger, isAbovePlayer) {
+// EXAMPLE
+// createInteractible(13, 15, {
+//     // playerOnTop: () => console.log('you are on top'),
+//     // playerOnBottom: () => console.log('you are on bottom'),
+//     // playerOnLeft: () => console.log('you are on Left'),
+//     // playerOnRight: () => console.log('you are on Right'),
+//     // playerAbove: () => console.log('you are above!'),
+//     // playerBelow: () => console.log('you are below!'),
+// }, false, true, true);
+
+function interactibleObj(nodeX, nodeY, img, trigger, isAbovePlayer, oneTimeOnly) {
     this.x = Number.NEGATIVE_INFINITY;
     this.y = Number.NEGATIVE_INFINITY;
     this.isAbovePlayer = isAbovePlayer;
+    this.triggered = false;
+    this.oneTimeOnly = oneTimeOnly;
     this.gameAreaPos = {
         x: nodeX,
         y: nodeY
     }
     this.triggerEvent = () => {
+        if (this.oneTimeOnly) {
+            if(!this.triggered) this.triggered = true;
+            else return;
+        }
         triggerHandler(this, trigger);
     };
     this.draw = () => {
+        if (this.oneTimeOnly && this.triggered) return;
+
         this.x = this.gameAreaPos.x * unit_size;
         this.y = this.gameAreaPos.y * unit_size;
 
-        fillColor('#0a0');
-        drawRect(this.x + 5, this.y + 5, 30, 30);
+        if (img) {
+            drawImg(img, this.x, this.y, unit_size, unit_size);
+        }
+        else {
+            fillColor('#0a0');
+            drawRect(this.x + 5, this.y + 5, 30, 30);
+        }
     };
     this.samePosAsPlayer = () => {
         return JSON.stringify(player.gameAreaPos) === JSON.stringify(this.gameAreaPos);
@@ -47,11 +70,11 @@ function triggerHandler(iObj, trigger) {
     }
 }
 
-function createInteractible(x, y, trigger, isAbovePlayer, canWalkThru) {
-    if(!canWalkThru) {
+function createInteractible(x, y, img, trigger, isAbovePlayer, oneTimeOnly, canWalkThru) {
+    if (!canWalkThru) {
         gameArea[x][y].walkable = false;
     }
-    interactible[x][y] = new interactibleObj(x, y, trigger, isAbovePlayer);
+    interactible[x][y] = new interactibleObj(x, y, img, trigger, isAbovePlayer, oneTimeOnly);
 }
 
 function validateTrigger(trigger, keyMethod) {
