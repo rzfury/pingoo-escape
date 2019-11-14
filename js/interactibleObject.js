@@ -11,6 +11,7 @@
 function interactibleObj(nodeX, nodeY, img, trigger, isAbovePlayer, oneTimeOnly) {
     this.x = Number.NEGATIVE_INFINITY;
     this.y = Number.NEGATIVE_INFINITY;
+    this.interactDialog = '';
     this.isAbovePlayer = isAbovePlayer;
     this.triggered = false;
     this.oneTimeOnly = oneTimeOnly;
@@ -74,7 +75,27 @@ function createInteractible(x, y, img, trigger, isAbovePlayer, oneTimeOnly, canW
     if (!canWalkThru) {
         gameArea[x][y].walkable = false;
     }
+    else if(canWalkThru) {
+        gameArea[x][y].walkable = true;
+    }
     interactible[x][y] = new interactibleObj(x, y, img, trigger, isAbovePlayer, oneTimeOnly);
+}
+
+function setInteractDialog(x, y, text = '') {
+    if(getInteractible(x, y) !== null) {
+        interactible[x][y].interactDialog = text;
+    }
+}
+
+function getInteractibleDialog(x, y) {
+    if(getInteractible(x, y) !== null) {
+        return interactible[x][y].interactDialog;
+    }
+    return '';
+}
+
+function destroyInteractible(x, y) {
+    interactible[x][y] = { x, y, empty: true };
 }
 
 function validateTrigger(trigger, keyMethod) {

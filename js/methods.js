@@ -45,7 +45,7 @@ function drawFrame(update, lateUpdate) {
         lateDrawInteractible();
     }
 
-    drawFog(1);
+    // drawFog(1);
 
     update();
     player.update();
