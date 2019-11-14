@@ -20,3 +20,6 @@ let interactible = [];
 let lateDrawInteractObj = [];
 
 const unit_size = 40;
+const startTime = Date.now();
+
+let timeElapsed = Date.now();

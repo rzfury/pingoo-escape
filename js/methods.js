@@ -28,12 +28,22 @@ function drawSprite(img, frameW, frameH, unitW, unitH, x, y, w, h) {
 }
 
 function drawText(text, x, y, color = '#fff', font = 'Arial', size = '12pt') {
+    context.textAlign = 'left';
+    context.fillStyle = color;
+    context.font = `${size} ${font}`;
+    context.fillText(text, x, y);
+}
+
+function drawTextR(text, x, y, color = '#fff', font = 'Arial', size = '12pt') {
+    context.textAlign = 'right';
     context.fillStyle = color;
     context.font = `${size} ${font}`;
     context.fillText(text, x, y);
 }
 
 function drawFrame(update, lateUpdate) {
+    updateTimer();
+
     clearCanvas();
     if (gameArea.length > 0) {
         drawGameArea();
@@ -45,7 +55,7 @@ function drawFrame(update, lateUpdate) {
         lateDrawInteractible();
     }
 
-    // drawFog(1);
+    drawFog(1);
 
     update();
     player.update();
@@ -147,4 +157,15 @@ function drawFog(viewDistance = 1) {
     const x = ((size/2*-1) + player.x + player.unit_size - 5);
     const y = ((size/2*-1) + player.y + player.unit_size - 5);
     drawImg(images.fog, x, y, size, size);
+}
+
+function updateTimer() {
+    timeElapsed = Date.now();
+}
+
+function getTimer() {
+    const diff = timeElapsed - startTime;
+    const minutes = Math.floor((diff % (3600 * 1000)) / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
+    return `${minutes} : ${seconds}`;
 }

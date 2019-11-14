@@ -19,9 +19,10 @@ function Init() {
 function Update() {
     // drawRect(10, 10, 100, 100);
     drawText(`${keysFound} Keys Found`, 4, 19);
+    drawTextR(`${getTimer()}`, 794, 19);
 
     if (player.samePosWithInteractible()) {
-        drawText(getInteractibleDialog(player.gameAreaPos.x, player.gameAreaPos.y), 4, 400);
+        drawText(getInteractibleDialog(player.gameAreaPos.x, player.gameAreaPos.y), 4, 474);
     }
 }
 
@@ -32,7 +33,7 @@ function LateUpdate() {
 function CreateInteractibleObjects() {
     // Create Keys
     for (let i = 0; i < allKeys; i++) {
-        const node = SelectRandomWalkableNode();
+        const node = i === 0 ? {x: 1, y:3} : SelectRandomWalkableNode();
         const interactObj = createInteractible(node.x, node.y, images.key, {
             playerAbove: () => keysFound += 1,
         }, false, true, true);
