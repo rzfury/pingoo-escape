@@ -31,6 +31,9 @@ function LateUpdate() {
     if (player.samePosWithInteractible()) {
         drawText(getInteractibleDialog(player.gameAreaPos.x, player.gameAreaPos.y), 11, 468);
     }
+    if (player.isFacingInteractible() && player.facing === 1) {
+        drawText(getInteractibleDialog(player.facingPos.x, player.facingPos.y), 11, 468);
+    }
 
     DrawKeysCount();
     DrawFlashlights();
@@ -55,6 +58,9 @@ function CreateInteractibleObjects() {
         const node = i === 0 ? {x: 1, y:1} : SelectRandomWalkableNode();
         const interactObj = createInteractible(node.x, node.y, images.flashlight, {
             playerAbove: () => {
+                if(flashlightFound === 0) {
+                    gameStarted = true;
+                }
                 flashlightFound += 1;
                 showPopup('Flashlight picked up.');
             },
@@ -70,7 +76,9 @@ function CreateInteractibleObjects() {
                 destroyInteractible(1, 0);
                 createInteractible(1, 0, images.doorOpen, {
                     playerAbove: () => {
-                        showPopup(`Congratulations! You win the game.`);
+                        gameOver = true;
+                        document.getElementById('win-label-time').innerHTML = getTimer();
+                        document.getElementById('win-overlay').style.display = 'initial';
                     },
                 }, false, false, true);
                 setInteractDialog(1, 0, 'Press Z to finish the Game');
@@ -80,6 +88,7 @@ function CreateInteractibleObjects() {
             }
         },
     }, false, false, false);
+    setInteractDialog(1, 0, 'Press Z to open the door');
 }
 
 function SelectRandomWalkableNode() {

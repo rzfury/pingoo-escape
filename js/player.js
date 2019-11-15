@@ -2,6 +2,8 @@ function initPlayer(startX = 0, startY = 0) {
     player = new _player(startX, startY);
 
     function _player(px, py) {
+        const playerFacingPos = [[0, 1], [0, -1], [-1, 0], [1, 0]];
+
         this.x = px * unit_size;
         this.y = py * unit_size;
         this.dx = px * unit_size;
@@ -9,6 +11,10 @@ function initPlayer(startX = 0, startY = 0) {
         this.gameAreaPos = {
             x: px,
             y: py
+        }
+        this.facingPos = {
+            x: px,
+            y: py + 1,
         }
         this.moveSpeed = 8;
         this.moveState = {
@@ -35,6 +41,8 @@ function initPlayer(startX = 0, startY = 0) {
             drawSprite(images.pingoo, Math.floor(this.frameW / 2), this.facing, 128, 128, this.x + 5, this.y + 5, this.unit_size, this.unit_size);
         };
         this.update = () => {
+            if(!gameStarted || gameOver) return;
+
             this.moveState = keyState;
             if (this.y > this.dy) {
                 this.y = Math.max(this.y - (this.y - this.dy), this.y - this.moveSpeed);
@@ -98,11 +106,16 @@ function initPlayer(startX = 0, startY = 0) {
             else {
                 this.frameW = 0;
             }
+
+            this.facingPos = {
+                x: this.gameAreaPos.x + playerFacingPos[this.facing][0],
+                y: this.gameAreaPos.y + playerFacingPos[this.facing][1]
+            }
         };
         this.interact = () => {
-            if (keyState.Z) {
-                return;
-            }
+            if(gameOver) return;
+            if (keyState.Z) return;
+            
             const facingPos = [[0, 1], [0, -1], [-1, 0], [1, 0]];
             let interactObj = getInteractible(this.gameAreaPos.x + facingPos[this.facing][0], this.gameAreaPos.y + facingPos[this.facing][1]);
 
@@ -129,6 +142,15 @@ function initPlayer(startX = 0, startY = 0) {
         this.samePosWithInteractible = () => {
             if (getInteractible(this.gameAreaPos.x, this.gameAreaPos.y) !== null) {
                 return !getInteractible(this.gameAreaPos.x, this.gameAreaPos.y).triggered;
+            }
+            return false;
+        }
+        this.isFacingInteractible = () => {
+            const facingPos = [[0, 1], [0, -1], [-1, 0], [1, 0]];
+            let interactObj = getInteractible(this.facingPos.x, this.facingPos.y);
+
+            if (interactObj !== null) {
+                return !interactObj.triggered;
             }
             return false;
         }

@@ -54,9 +54,9 @@ function drawFrame(update, lateUpdate) {
         drawGameArea();
 
         drawInteractible();
-    
+
         player.draw();
-    
+
         lateDrawInteractible();
     }
 
@@ -93,18 +93,6 @@ function generateGameAreaFromMap(map = []) {
     });
 }
 
-function generateGameArea(width, height) {
-    for (let w = 0; w < width; w++) {
-        let wNodes = [];
-
-        for (let h = 0; h < height; h++) {
-            wNodes.push(new areaNode(w, h, '#aaa'));
-        }
-
-        gameArea.push(wNodes);
-    }
-}
-
 function drawGameArea() {
     gameArea.forEach((horizontalNodes) => {
         horizontalNodes.forEach((node) => {
@@ -125,7 +113,7 @@ function drawInteractible() {
             if (iobj.isAbovePlayer) {
                 lateDrawInteractObj.push({ x: iobj.gameAreaPos.x, y: iobj.gameAreaPos.y });
             } else {
-               iobj.draw();
+                iobj.draw();
             }
         })
     });
@@ -161,13 +149,17 @@ function hasInteractible(x, y) {
 
 function drawFog(viewDistance = 1) {
     const size = 820 * ((Math.max(1, viewDistance) + 1) / 2);
-    const x = ((size/2*-1) + player.x + player.unit_size - 5);
-    const y = ((size/2*-1) + player.y + player.unit_size - 5);
+    const x = ((size / 2 * -1) + player.x + player.unit_size - 5);
+    const y = ((size / 2 * -1) + player.y + player.unit_size - 5);
     drawImg(images.fog, x, y, size, size);
 }
 
 function updateTimer() {
+    if(gameOver) return;
     timeElapsed = Date.now();
+    if (!gameStarted) {
+        startTime = Date.now();
+    }
 }
 
 function getTimer() {
