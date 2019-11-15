@@ -12,6 +12,7 @@ function strokeColor(str) {
 }
 
 function clearCanvas() {
+    context.globalAlpha = 1;
     context.clearRect(0, 0, 800, 480);
 }
 
@@ -64,6 +65,8 @@ function drawFrame(update, lateUpdate) {
     update();
     player.update();
     lateUpdate();
+
+    drawPopups();
 
     playerCenterScreen();
 }

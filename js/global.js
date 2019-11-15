@@ -1,6 +1,6 @@
 let canvas, context;
 let gameArea = [];
-let tiles = [];
+let popupMsgs = [];
 let images = {};
 
 let gameStarted = false;

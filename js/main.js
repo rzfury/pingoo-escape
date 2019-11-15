@@ -41,7 +41,10 @@ function CreateInteractibleObjects() {
     for (let i = 0; i < allKeys; i++) {
         const node = i === 0 ? {x: 1, y:3} : SelectRandomWalkableNode();
         const interactObj = createInteractible(node.x, node.y, images.key, {
-            playerAbove: () => keysFound += 1,
+            playerAbove: () => {
+                keysFound += 1;
+                showPopup(`Key Found! ${allKeys - keysFound} keys left.`);
+            },
         }, false, true, true);
 
         setInteractDialog(node.x, node.y, 'Press Z to take the Key');
@@ -51,7 +54,10 @@ function CreateInteractibleObjects() {
     for (let i = 0; i < allFlashlight; i++) {
         const node = i === 0 ? {x: 1, y:1} : SelectRandomWalkableNode();
         const interactObj = createInteractible(node.x, node.y, images.flashlight, {
-            playerAbove: () => flashlightFound += 1,
+            playerAbove: () => {
+                flashlightFound += 1;
+                showPopup('Flashlight picked up.');
+            },
         }, false, true, true);
 
         setInteractDialog(node.x, node.y, 'Press Z to take the flashlight');
@@ -64,13 +70,13 @@ function CreateInteractibleObjects() {
                 destroyInteractible(1, 0);
                 createInteractible(1, 0, images.doorOpen, {
                     playerAbove: () => {
-                        console.log('WIN!');
+                        showPopup(`Congratulations! You win the game.`);
                     },
                 }, false, false, true);
                 setInteractDialog(1, 0, 'Press Z to finish the Game');
             }
             else {
-                console.log('Not Enough Keys!');
+                showPopup(`Need ${allKeys - keysFound} more keys to open the door.`);
             }
         },
     }, false, false, false);
@@ -98,7 +104,6 @@ function DrawKeysCount() {
 }
 
 function DrawFlashlights() {
-    if(flashlightFound < 1) return;
     drawUIImg(images.flashlight, 70, 0, 40, 40);
     drawText(`${flashlightFound}`, 102, 27);
 }
