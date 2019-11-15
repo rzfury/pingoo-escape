@@ -6,6 +6,7 @@ let flashlightFound = 0;
 
 function Init() {
     loadImages();
+    loadSFXs();
 
     initCanvas();
     initKeyHandle();
@@ -43,52 +44,68 @@ function CreateInteractibleObjects() {
     // Create Keys
     for (let i = 0; i < allKeys; i++) {
         const node = i === 0 ? {x: 1, y:3} : SelectRandomWalkableNode();
-        const interactObj = createInteractible(node.x, node.y, images.key, {
+        createInteractible(node.x, node.y, images.key, {
             playerAbove: () => {
+                PlaySFX(sfx.pickupKey);
+                if(keysFound === 0) {
+                    showPopupDelay('Get all the keys to unlock the gate', 0);
+                }
                 keysFound += 1;
-                showPopup(`Key Found! ${allKeys - keysFound} keys left.`);
+                if(keysFound === 8) {
+                    showPopup(`All keys has been collected, return to the gate to escape`);
+                }
+                else {
+                    showPopup(`Key Found! ${allKeys - keysFound} keys left.`);
+                }
+                destroyInteractible(node.x, node.y);
             },
         }, false, true, true);
 
-        setInteractDialog(node.x, node.y, 'Press Z to take the Key');
+        setInteractDialog(node.x, node.y, 'Press Z/Space to take the Key');
     }
 
     // Create Flashlights
     for (let i = 0; i < allFlashlight; i++) {
         const node = i === 0 ? {x: 1, y:1} : SelectRandomWalkableNode();
-        const interactObj = createInteractible(node.x, node.y, images.flashlight, {
+        createInteractible(node.x, node.y, images.flashlight, {
             playerAbove: () => {
+                PlaySFX(sfx.getFlashlight);
                 if(flashlightFound === 0) {
+                    showPopupDelay('Get more flashlight to increase view range', 0);
                     gameStarted = true;
                 }
                 flashlightFound += 1;
                 showPopup('Flashlight picked up.');
+                destroyInteractible(node.x, node.y);
             },
         }, false, true, true);
 
-        setInteractDialog(node.x, node.y, 'Press Z to take the flashlight');
+        setInteractDialog(node.x, node.y, 'Press Z/Space to take the flashlight');
     }
 
     // Create Door
     createInteractible(1, 0, images.doorClose, {
         playerOnBottom: () => {
             if (keysFound === allKeys) {
+                PlaySFX(sfx.doorOpen);
                 destroyInteractible(1, 0);
                 createInteractible(1, 0, images.doorOpen, {
                     playerAbove: () => {
+                        PlaySFX(sfx.gameover);
                         gameOver = true;
                         document.getElementById('win-label-time').innerHTML = getTimer();
                         document.getElementById('win-overlay').style.display = 'initial';
                     },
                 }, false, false, true);
-                setInteractDialog(1, 0, 'Press Z to finish the Game');
+                setInteractDialog(1, 0, 'Press Z/Space to finish the Game');
             }
             else {
+                PlaySFX(sfx.locked);
                 showPopup(`Need ${allKeys - keysFound} more keys to open the door.`);
             }
         },
     }, false, false, false);
-    setInteractDialog(1, 0, 'Press Z to open the door');
+    setInteractDialog(1, 0, 'Press Z/Space to open the door');
 }
 
 function SelectRandomWalkableNode() {

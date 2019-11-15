@@ -21,6 +21,7 @@ function keyDownHandler(event) {
             keyState.RIGHT = true;
             break;
         case 'z':
+        case ' ':
             player.interact();
             keyState.Z = true;
             break;
@@ -50,6 +51,7 @@ function keyUpHandler(event) {
             keyState.RIGHT = false;
             break;
         case 'z':
+        case ' ':
             keyState.Z = false;
             break;
     }

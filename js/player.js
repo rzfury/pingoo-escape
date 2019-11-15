@@ -101,6 +101,10 @@ function initPlayer(startX = 0, startY = 0) {
             }
 
             if (this.getDestDistance() > 0) {
+                if(this.getDestDistance() % 3 === 0) {
+                    PlaySFX(sfx.walk);
+                }
+
                 this.frameW = this.frameW === 7 ? 0 : this.frameW + 1;
             }
             else {

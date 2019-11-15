@@ -2,6 +2,10 @@ function showPopup(msg) {
     popupMsgs.push(new _popupMsg(msg));
 }
 
+function showPopupDelay(msg, delay = 0) {
+    setTimeout(() => popupMsgs.push(new _popupMsg(msg)), Math.max(1, 1000 * delay));
+}
+
 function _popupMsg(msg) {
     this.opacity = 8;
     this.msg = msg;

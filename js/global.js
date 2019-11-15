@@ -2,7 +2,9 @@ let canvas, context;
 let gameArea = [];
 let popupMsgs = [];
 let images = {};
+let sfx = {};
 
+let isInMainMenu = true;
 let gameStarted = false;
 let gameOver = false;
 
