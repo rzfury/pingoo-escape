@@ -20,10 +20,6 @@ function interactibleObj(nodeX, nodeY, img, trigger, isAbovePlayer, oneTimeOnly)
         y: nodeY
     }
     this.triggerEvent = () => {
-        if (this.oneTimeOnly) {
-            if(!this.triggered) this.triggered = true;
-            else return;
-        }
         triggerHandler(this, trigger);
     };
     this.draw = () => {
@@ -48,26 +44,50 @@ function interactibleObj(nodeX, nodeY, img, trigger, isAbovePlayer, oneTimeOnly)
 function triggerHandler(iObj, trigger) {
     if (typeof trigger.all !== 'undefined') {
         trigger.all();
+        oneTimeTrigger(iObj)
     }
     else {
         if (validateTrigger(trigger, 'playerOnTop')) {
-            player.facing === 0 && trigger.playerOnTop();
+            if (player.facing === 0) {
+                trigger.playerOnTop();
+                oneTimeTrigger(iObj)
+            }
         }
         if (validateTrigger(trigger, 'playerOnBottom')) {
-            player.facing === 1 && trigger.playerOnBottom();
+            if (player.facing === 1) {
+                trigger.playerOnBottom();
+                oneTimeTrigger(iObj)
+            }
         }
         if (validateTrigger(trigger, 'playerOnLeft')) {
-            player.facing === 3 && trigger.playerOnLeft();
+            if (player.facing === 3) {
+                trigger.playerOnLeft();
+            }
         }
         if (validateTrigger(trigger, 'playerOnRight')) {
-            player.facing === 2 && trigger.playerOnRight();
+            if (player.facing === 2) {
+                trigger.playerOnRight();
+                oneTimeTrigger(iObj)
+            }
         }
         if (validateTrigger(trigger, 'playerAbove')) {
-            iObj.samePosAsPlayer() && !iObj.isAbovePlayer && trigger.playerAbove();
+            if (iObj.samePosAsPlayer() && !iObj.isAbovePlayer) {
+                trigger.playerAbove();
+                oneTimeTrigger(iObj)
+            }
         }
         if (validateTrigger(trigger, 'playerBelow')) {
-            iObj.samePosAsPlayer() && iObj.isAbovePlayer && trigger.playerBelow();
+            if (iObj.samePosAsPlayer() && iObj.isAbovePlayer) {
+                trigger.playerBelow();
+                oneTimeTrigger(iObj)
+            }
         }
+    }
+}
+
+function oneTimeTrigger(iObj) {
+    if (iObj.oneTimeOnly && !iObj.triggered) {
+        iObj.triggered = true;
     }
 }
 
@@ -75,20 +95,20 @@ function createInteractible(x, y, img, trigger, isAbovePlayer, oneTimeOnly, canW
     if (!canWalkThru) {
         gameArea[x][y].walkable = false;
     }
-    else if(canWalkThru) {
+    else if (canWalkThru) {
         gameArea[x][y].walkable = true;
     }
     interactible[x][y] = new interactibleObj(x, y, img, trigger, isAbovePlayer, oneTimeOnly);
 }
 
 function setInteractDialog(x, y, text = '') {
-    if(getInteractible(x, y) !== null) {
+    if (getInteractible(x, y) !== null) {
         interactible[x][y].interactDialog = text;
     }
 }
 
 function getInteractibleDialog(x, y) {
-    if(getInteractible(x, y) !== null) {
+    if (getInteractible(x, y) !== null) {
         return interactible[x][y].interactDialog;
     }
     return '';

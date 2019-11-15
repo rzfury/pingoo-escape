@@ -92,7 +92,7 @@ function initPlayer(startX = 0, startY = 0) {
                 }
             }
 
-            if(this.getDestDistance() > 0) {
+            if (this.getDestDistance() > 0) {
                 this.frameW = this.frameW === 7 ? 0 : this.frameW + 1;
             }
             else {
@@ -105,19 +105,29 @@ function initPlayer(startX = 0, startY = 0) {
             }
             const facingPos = [[0, 1], [0, -1], [-1, 0], [1, 0]];
             let interactObj = getInteractible(this.gameAreaPos.x + facingPos[this.facing][0], this.gameAreaPos.y + facingPos[this.facing][1]);
-            
-            if(interactObj !== null) {
-                interactObj.triggerEvent();
+
+            if (interactObj !== null) {
+                if (interactObj.oneTimeOnly && !interactObj.triggered) {
+                    interactObj.triggerEvent();
+                }
+                else {
+                    interactObj.triggerEvent();
+                }
             }
             else {
                 interactObj = getInteractible(this.gameAreaPos.x, this.gameAreaPos.y);
-                if(interactObj !== null) {
-                    interactObj.triggerEvent();
+                if (interactObj !== null) {
+                    if (interactObj.oneTimeOnly && !interactObj.triggered) {
+                        interactObj.triggerEvent();
+                    }
+                    else {
+                        interactObj.triggerEvent();
+                    }
                 }
             }
         }
         this.samePosWithInteractible = () => {
-            if(getInteractible(this.gameAreaPos.x, this.gameAreaPos.y) !== null) {
+            if (getInteractible(this.gameAreaPos.x, this.gameAreaPos.y) !== null) {
                 return !getInteractible(this.gameAreaPos.x, this.gameAreaPos.y).triggered;
             }
             return false;

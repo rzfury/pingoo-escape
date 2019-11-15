@@ -5,6 +5,7 @@ let imagesToLoad = [
     { key: 'doorOpen', src: 'img/door_opened.png' },
     { key: 'doorClose', src: 'img/door_locked.png' },
     { key: 'key', src: 'img/key1.png' },
+    { key: 'flashlight', src: 'img/flashlight.png' },
     { key: 'fog', src: 'img/darkfog.png' },
 ];
 

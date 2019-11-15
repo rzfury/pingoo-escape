@@ -27,6 +27,10 @@ function drawSprite(img, frameW, frameH, unitW, unitH, x, y, w, h) {
     context.drawImage(img, unitW * frameW, unitH * frameH, unitW, unitH, x + drawOffset.x, y + drawOffset.y, w, h);
 }
 
+function drawUIImg(img, x, y, w, h) {
+    context.drawImage(img, x, y, w, h);
+}
+
 function drawText(text, x, y, color = '#fff', font = 'Arial', size = '12pt') {
     context.textAlign = 'left';
     context.fillStyle = color;
@@ -55,7 +59,7 @@ function drawFrame(update, lateUpdate) {
         lateDrawInteractible();
     }
 
-    drawFog(1);
+    drawFog(flashlightFound);
 
     update();
     player.update();
@@ -165,7 +169,7 @@ function updateTimer() {
 
 function getTimer() {
     const diff = timeElapsed - startTime;
-    const minutes = Math.floor((diff % (3600 * 1000)) / 60000);
-    const seconds = Math.floor((diff % 60000) / 1000);
-    return `${minutes} : ${seconds}`;
+    const minutes = (Math.floor((diff % (3600 * 1000)) / 60000)).toString();
+    const seconds = (Math.floor((diff % 60000) / 1000)).toString();
+    return `${minutes.padStart(2, '0')} : ${seconds.padStart(2, '0')}`;
 }

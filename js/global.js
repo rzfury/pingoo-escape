@@ -3,6 +3,9 @@ let gameArea = [];
 let tiles = [];
 let images = {};
 
+let gameStarted = false;
+let gameOver = false;
+
 let keyState = {
     UP: false,
     DOWN: false,

@@ -1,6 +1,9 @@
 let allKeys = 8;
 let keysFound = 0;
 
+let allFlashlight = 5;
+let flashlightFound = 0;
+
 function Init() {
     loadImages();
 
@@ -17,17 +20,20 @@ function Init() {
 }
 
 function Update() {
-    // drawRect(10, 10, 100, 100);
-    drawText(`${keysFound} Keys Found`, 4, 19);
-    drawTextR(`${getTimer()}`, 794, 19);
 
-    if (player.samePosWithInteractible()) {
-        drawText(getInteractibleDialog(player.gameAreaPos.x, player.gameAreaPos.y), 4, 474);
-    }
 }
 
 function LateUpdate() {
+    flashlightFound < 1 && DrawDarkness();
 
+    drawTextR(`${getTimer()}`, 784, 27);
+
+    if (player.samePosWithInteractible()) {
+        drawText(getInteractibleDialog(player.gameAreaPos.x, player.gameAreaPos.y), 11, 468);
+    }
+
+    DrawKeysCount();
+    DrawFlashlights();
 }
 
 function CreateInteractibleObjects() {
@@ -39,6 +45,16 @@ function CreateInteractibleObjects() {
         }, false, true, true);
 
         setInteractDialog(node.x, node.y, 'Press Z to take the Key');
+    }
+
+    // Create Flashlights
+    for (let i = 0; i < allFlashlight; i++) {
+        const node = i === 0 ? {x: 1, y:1} : SelectRandomWalkableNode();
+        const interactObj = createInteractible(node.x, node.y, images.flashlight, {
+            playerAbove: () => flashlightFound += 1,
+        }, false, true, true);
+
+        setInteractDialog(node.x, node.y, 'Press Z to take the flashlight');
     }
 
     // Create Door
@@ -74,6 +90,22 @@ function SelectRandomWalkableNode() {
     };
 
     return node;
+}
+
+function DrawKeysCount() {
+    drawUIImg(images.key, 0, 0, 40, 40);
+    drawText(`${keysFound} / ${allKeys}`, 32, 27);
+}
+
+function DrawFlashlights() {
+    if(flashlightFound < 1) return;
+    drawUIImg(images.flashlight, 70, 0, 40, 40);
+    drawText(`${flashlightFound}`, 102, 27);
+}
+
+function DrawDarkness() {
+    context.fillStyle = '#000';
+    context.fillRect(0, 0, canvas.width, canvas.height);
 }
 
 setInterval(() => {
